@@ -8,7 +8,9 @@ import Alert from "@mui/material/Alert";
 export default function SearchBar({ updateInfo }) {
   let [city, setCity] = useState("");
   let [error, setError] = useState(false);
-  const API_URL = "http://api.weatherapi.com/v1/current.json?";
+
+  // https://api.weatherstack.com/current?access_key=YOUR_ACCESS_KEY&query=New York
+  const API_URL = "https://api.openweathermap.org/data/2.5/weather?";
   const weatherApiKey = import.meta.env.REACT_APP_WEATHER_API_KEY;
 
   const [userLocation, setUserLocation] = useState([]);
@@ -19,7 +21,7 @@ export default function SearchBar({ updateInfo }) {
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation([latitude, longitude]);
-          console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+          // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
         },
         (error) => {
           console.error("Error getting geolocation:", error);
@@ -35,19 +37,21 @@ export default function SearchBar({ updateInfo }) {
       async function userLocationWeather() {
         try {
           let response = await fetch(
-            `${API_URL}key=${weatherApiKey}&q=${userLocation[0]},${userLocation[1]}`
+            `${API_URL}lat=${userLocation[0]}&lon=${userLocation[1]}&appid=${weatherApiKey}&units=metric`
           );
+          //https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
           let jsonResponse = await response.json();
           let result = {
-            temp: jsonResponse.current.temp_c,
-            humidity: jsonResponse.current.humidity,
-            feelsLike: jsonResponse.current.feelslike_c,
-            localtime: jsonResponse.location.localtime,
-            lastUpdated: jsonResponse.current.last_updated,
-            country: jsonResponse.location.country,
-            city: jsonResponse.location.name,
-            region: jsonResponse.location.region,
-            weatherCondition: jsonResponse.current.condition.text,
+            temp: jsonResponse.main.temp,
+            humidity: jsonResponse.main.humidity,
+            feelsLike: jsonResponse.main.feels_like,
+            tempMin: jsonResponse.main.temp_min,
+            tempMax: jsonResponse.main.temp_max,
+            city: jsonResponse.name,
+            country: jsonResponse.sys.country,
+            weatherMain:jsonResponse.weather[0].main,
+            weather_icon:jsonResponse.weather[0].icon,
+            weatherCondition: jsonResponse.weather[0].description,
           };
           console.log(jsonResponse);
           console.log(result);
@@ -62,19 +66,21 @@ export default function SearchBar({ updateInfo }) {
 
   let getWeatherInfo = async () => {
     try {
-      let response = await fetch(`${API_URL}key=${weatherApiKey}&q=${city}`);
+      let response = await fetch(
+        `${API_URL}q=${city}&appid=${weatherApiKey}&units=metric`
+      );
+      // https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+
       let jsonResponse = await response.json();
       let result = {
-        cloud: jsonResponse.current.cloud,
-        temp: jsonResponse.current.temp_c,
-        humidity: jsonResponse.current.humidity,
-        feelsLike: jsonResponse.current.feelslike_c,
-        localtime: jsonResponse.location.localtime,
-        lastUpdated: jsonResponse.current.last_updated,
-        country: jsonResponse.location.country,
-        city: jsonResponse.location.name,
-        region: jsonResponse.location.region,
-        weatherCondition: jsonResponse.current.condition.text,
+        temp: jsonResponse.main.temp,
+        humidity: jsonResponse.main.humidity,
+        feelsLike: jsonResponse.main.feels_like,
+        tempMin: jsonResponse.main.temp_min,
+        tempMax: jsonResponse.main.temp_max,
+        city: jsonResponse.name,
+        country: jsonResponse.sys.country,
+        weatherCondition: jsonResponse.weather[0].description,
       };
       console.log(jsonResponse);
       console.log(result);

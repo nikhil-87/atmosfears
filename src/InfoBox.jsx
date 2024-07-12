@@ -26,21 +26,49 @@ export default function InfoBox({ info }) {
   let weatherIcon;
 
   // Determine weather based on available data
-  if (info.humidity > 80) {
+  // if (info.humidity > 80) {
+  //   weatherIcon = <ThunderstormRoundedIcon />;
+  // } else if (info.temp > 25 && info.cloud < 50) {
+  //   weatherIcon = <WbSunnyRoundedIcon />;
+  // } else if (info.temp > 15 && info.cloud >= 50) {
+  //   weatherIcon = <WbCloudyRoundedIcon />;
+  // } else if (info.temp < 5) {
+  //   weatherIcon = <AcUnitRoundedIcon />;
+  // } else if (info.temp > 5 && info.temp < 15) {
+  //   weatherIcon = <CloudQueueRoundedIcon />;
+  // } else if (info.temp > 15 && info.temp < 25) {
+  //   weatherIcon = <WaterRoundedIcon />;
+  // } else if (info.temp > 25) {
+  //   weatherIcon = <AirRoundedIcon />;
+  // } else {
+  //   weatherIcon = <TornadoRoundedIcon />;
+  // }
+
+  //info.weatherMain  have a range of thunderstorm, drizzle, rain, snow, clouds, atmosphere etc.
+  if (info.weatherMain === "Thunderstorm") {
     weatherIcon = <ThunderstormRoundedIcon />;
-  } else if (info.temp > 25 && info.cloud < 50) {
-    weatherIcon = <WbSunnyRoundedIcon />;
-  } else if (info.temp > 15 && info.cloud >= 50) {
-    weatherIcon = <WbCloudyRoundedIcon />;
-  } else if (info.temp < 5) {
-    weatherIcon = <AcUnitRoundedIcon />;
-  } else if (info.temp > 5 && info.temp < 15) {
-    weatherIcon = <CloudQueueRoundedIcon />;
-  } else if (info.temp > 15 && info.temp < 25) {
+  } else if (info.weatherMain === "Drizzle" || info.weatherMain === "Rain") {
     weatherIcon = <WaterRoundedIcon />;
-  } else if (info.temp > 25) {
-    weatherIcon = <AirRoundedIcon />;
+  } else if (info.weatherMain === "Snow") {
+    weatherIcon = <AcUnitRoundedIcon />;
+  } else if (info.weatherMain === "Clear") {
+    if (info.temp > 25) {
+      weatherIcon = <WbSunnyRoundedIcon />;
+    } else {
+      weatherIcon = <WbCloudyRoundedIcon />;
+    }
+  } else if (info.weatherMain === "Clouds") {
+    if (info.temp < 5) {
+      weatherIcon = <AcUnitRoundedIcon />;
+    } else if (info.temp >= 5 && info.temp < 15) {
+      weatherIcon = <CloudQueueRoundedIcon />;
+    } else if (info.temp >= 15 && info.temp < 25) {
+      weatherIcon = <WaterRoundedIcon />;
+    } else {
+      weatherIcon = <AirRoundedIcon />;
+    }
   } else {
+    // Handle other weather categories like "Atmosphere", etc.
     weatherIcon = <TornadoRoundedIcon />;
   }
 
@@ -58,10 +86,9 @@ export default function InfoBox({ info }) {
               {info.city ? (
                 <div>
                   <p>
-                    {`${info.city}, ${info.region + "," || ""} ${
-                      info.country
-                    } `}
+                    {`${info.city}, ${info.country} `}
                     <br></br>
+                    <img src={`https://openweathermap.org/img/wn/${info.weather_icon}@2x.png`}></img>
                     {weatherIcon}
                   </p>
                 </div>
@@ -78,19 +105,13 @@ export default function InfoBox({ info }) {
                 <>
                   <p>Temperature = {info.temp}&deg;C</p>
                   <p>Humidity = {info.humidity}</p>
+                  <p>Min Temp = {info.tempMin}&deg;C</p>
+                  <p>Max Temp = {info.tempMax}&deg;C</p>
                   <p>
-                    The Weather can be described as{" "}
-                    <b>
-                      <i>{info.weatherCondition}</i>
-                    </b>{" "}
-                    and feels like {info.feelsLike}&deg;C
+                    The Weather can be described as
+                    <i>{info.weatherCondition}</i>and feels like{" "}
+                    {info.feelsLike}&deg;C
                   </p>
-                  <br></br>
-                  <div style={{ fontSize: "0.625rem" }}>
-                    Searched Time: {info.localtime}
-                    <hr></hr>
-                    Last Updated at: {info.lastUpdated}
-                  </div>
                 </>
               ) : (
                 <p>
