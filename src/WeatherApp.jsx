@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import InfoBox from "./InfoBox";
 import SearchBar from "./SearchBar";
-import CycloneRoundedIcon from "@mui/icons-material/CycloneRounded";
+import CycloneRoundedIcon from '@mui/icons-material/CycloneRounded';
 
 export default function WeatherApp() {
   const [weatherInfo, setWeatherInfo] = useState({});
