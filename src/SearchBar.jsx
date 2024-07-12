@@ -50,7 +50,6 @@ export default function SearchBar({ updateInfo }) {
             // weather_icon:jsonResponse.weather[0].icon,
             weatherCondition: jsonResponse.weather[0].description,
           };
-          console.log(jsonResponse);
           console.log(result);
           updateInfo(result);
         } catch (error) {
@@ -78,7 +77,6 @@ export default function SearchBar({ updateInfo }) {
         country: jsonResponse.sys.country,
         weatherCondition: jsonResponse.weather[0].description,
       };
-      console.log(jsonResponse);
       console.log(result);
       return result;
     } catch (error) {
