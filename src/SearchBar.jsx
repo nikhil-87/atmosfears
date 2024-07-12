@@ -9,7 +9,6 @@ export default function SearchBar({ updateInfo }) {
   let [city, setCity] = useState("");
   let [error, setError] = useState(false);
 
-  // https://api.weatherstack.com/current?access_key=YOUR_ACCESS_KEY&query=New York
   const API_URL = "https://api.openweathermap.org/data/2.5/weather?";
   const weatherApiKey = import.meta.env.REACT_APP_WEATHER_API_KEY;
 
@@ -21,7 +20,6 @@ export default function SearchBar({ updateInfo }) {
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation([latitude, longitude]);
-          // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
         },
         (error) => {
           console.error("Error getting geolocation:", error);
@@ -39,7 +37,6 @@ export default function SearchBar({ updateInfo }) {
           let response = await fetch(
             `${API_URL}lat=${userLocation[0]}&lon=${userLocation[1]}&appid=${weatherApiKey}&units=metric`
           );
-          //https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
           let jsonResponse = await response.json();
           let result = {
             temp: jsonResponse.main.temp,
@@ -49,8 +46,8 @@ export default function SearchBar({ updateInfo }) {
             tempMax: jsonResponse.main.temp_max,
             city: jsonResponse.name,
             country: jsonResponse.sys.country,
-            weatherMain:jsonResponse.weather[0].main,
-            weather_icon:jsonResponse.weather[0].icon,
+            weatherMain: jsonResponse.weather[0].main,
+            // weather_icon:jsonResponse.weather[0].icon,
             weatherCondition: jsonResponse.weather[0].description,
           };
           console.log(jsonResponse);
@@ -69,7 +66,6 @@ export default function SearchBar({ updateInfo }) {
       let response = await fetch(
         `${API_URL}q=${city}&appid=${weatherApiKey}&units=metric`
       );
-      // https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
 
       let jsonResponse = await response.json();
       let result = {

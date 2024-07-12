@@ -25,25 +25,6 @@ export default function InfoBox({ info }) {
 
   let weatherIcon;
 
-  // Determine weather based on available data
-  // if (info.humidity > 80) {
-  //   weatherIcon = <ThunderstormRoundedIcon />;
-  // } else if (info.temp > 25 && info.cloud < 50) {
-  //   weatherIcon = <WbSunnyRoundedIcon />;
-  // } else if (info.temp > 15 && info.cloud >= 50) {
-  //   weatherIcon = <WbCloudyRoundedIcon />;
-  // } else if (info.temp < 5) {
-  //   weatherIcon = <AcUnitRoundedIcon />;
-  // } else if (info.temp > 5 && info.temp < 15) {
-  //   weatherIcon = <CloudQueueRoundedIcon />;
-  // } else if (info.temp > 15 && info.temp < 25) {
-  //   weatherIcon = <WaterRoundedIcon />;
-  // } else if (info.temp > 25) {
-  //   weatherIcon = <AirRoundedIcon />;
-  // } else {
-  //   weatherIcon = <TornadoRoundedIcon />;
-  // }
-
   //info.weatherMain  have a range of thunderstorm, drizzle, rain, snow, clouds, atmosphere etc.
   if (info.weatherMain === "Thunderstorm") {
     weatherIcon = <ThunderstormRoundedIcon />;
@@ -87,8 +68,8 @@ export default function InfoBox({ info }) {
                 <div>
                   <p>
                     {`${info.city}, ${info.country} `}
-                    <br></br>
-                    <img src={`https://openweathermap.org/img/wn/${info.weather_icon}@2x.png`}></img>
+                    &nbsp;&nbsp;
+                    {/* <img src={`https://openweathermap.org/img/wn/${info.weather_icon}@2x.png`}></img> */}
                     {weatherIcon}
                   </p>
                 </div>
@@ -108,9 +89,11 @@ export default function InfoBox({ info }) {
                   <p>Min Temp = {info.tempMin}&deg;C</p>
                   <p>Max Temp = {info.tempMax}&deg;C</p>
                   <p>
-                    The Weather can be described as
-                    <i>{info.weatherCondition}</i>and feels like{" "}
-                    {info.feelsLike}&deg;C
+                    The Weather can be described as{" "}
+                    <b>
+                      <i>{info.weatherCondition}</i>
+                    </b>{" "}
+                    and feels like {info.feelsLike}&deg;C
                   </p>
                 </>
               ) : (
