@@ -47,7 +47,7 @@ export default function SearchBar({ updateInfo }) {
             city: jsonResponse.name,
             country: jsonResponse.sys.country,
             weatherMain: jsonResponse.weather[0].main,
-            // weather_icon:jsonResponse.weather[0].icon,
+            weather_icon:jsonResponse.weather[0].icon,
             weatherCondition: jsonResponse.weather[0].description,
           };
           console.log(result);
@@ -75,6 +75,8 @@ export default function SearchBar({ updateInfo }) {
         tempMax: jsonResponse.main.temp_max,
         city: jsonResponse.name,
         country: jsonResponse.sys.country,
+        weatherIcon:jsonResponse.weather[0].icon,
+        weatherMain: jsonResponse.weather[0].main,
         weatherCondition: jsonResponse.weather[0].description,
       };
       console.log(result);

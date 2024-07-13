@@ -4,16 +4,6 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 
-// Import other weather icons as needed
-import WbCloudyRoundedIcon from "@mui/icons-material/WbCloudyRounded";
-import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
-import AcUnitRoundedIcon from "@mui/icons-material/AcUnitRounded";
-import ThunderstormRoundedIcon from "@mui/icons-material/ThunderstormRounded";
-import AirRoundedIcon from "@mui/icons-material/Air";
-import TornadoRoundedIcon from "@mui/icons-material/TornadoRounded";
-import CloudQueueRoundedIcon from "@mui/icons-material/CloudQueueRounded";
-import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
-
 import useUnsplashImage from "./useUnsplashImage"; // Import the custom hook
 import "./InfoBox.css";
 
@@ -23,35 +13,15 @@ export default function InfoBox({ info }) {
 
   const imageUrl = useUnsplashImage(info.weatherCondition); // Fetch image based on weather condition
 
-  let weatherIcon;
-
-  //info.weatherMain  have a range of thunderstorm, drizzle, rain, snow, clouds, atmosphere etc.
-  if (info.weatherMain === "Thunderstorm") {
-    weatherIcon = <ThunderstormRoundedIcon />;
-  } else if (info.weatherMain === "Drizzle" || info.weatherMain === "Rain") {
-    weatherIcon = <WaterRoundedIcon />;
-  } else if (info.weatherMain === "Snow") {
-    weatherIcon = <AcUnitRoundedIcon />;
-  } else if (info.weatherMain === "Clear") {
-    if (info.temp > 25) {
-      weatherIcon = <WbSunnyRoundedIcon />;
-    } else {
-      weatherIcon = <WbCloudyRoundedIcon />;
-    }
-  } else if (info.weatherMain === "Clouds") {
-    if (info.temp < 5) {
-      weatherIcon = <AcUnitRoundedIcon />;
-    } else if (info.temp >= 5 && info.temp < 15) {
-      weatherIcon = <CloudQueueRoundedIcon />;
-    } else if (info.temp >= 15 && info.temp < 25) {
-      weatherIcon = <WaterRoundedIcon />;
-    } else {
-      weatherIcon = <AirRoundedIcon />;
-    }
-  } else {
-    // Handle other weather categories like "Atmosphere", etc.
-    weatherIcon = <TornadoRoundedIcon />;
-  }
+  const styleColor = {
+    Thunderstorm: "#F3E5F5", // Light Lavender
+    Drizzle: "#E1F5FE", // Light Cyan
+    Rain: "#E3F2FD", // Light Sky Blue
+    Snow: "#FFFFFF", // Pure White
+    Clouds: "#F5F5F5", // Very Light Gray
+    Atmosphere: "#F0FFFF", // Light Azure
+    Clear: "#FFF8E1", // Light Yellow (Lemon Chiffon)
+  };
 
   return (
     <div className="InfoBox">
@@ -67,42 +37,54 @@ export default function InfoBox({ info }) {
               {info.city ? (
                 <div>
                   <p>
-                    {`${info.city}, ${info.country} `}
-                    &nbsp;&nbsp;
-                    {/* <img src={`https://openweathermap.org/img/wn/${info.weather_icon}@2x.png`}></img> */}
-                    {weatherIcon}
+                    {`${info.city}${
+                      info.country !== undefined ? ", " + info.country : ""
+                    }`}
                   </p>
                 </div>
               ) : (
                 "Weather Info Unavailable"
               )}
             </Typography>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              component={"span"}
+            <div
+              style={{
+                backgroundColor: styleColor[info.weatherMain],
+                borderRadius: "0.5rem",
+                border: "1px solid #EEEEEE",
+              }}
             >
-              {info.city ? (
-                <>
-                  <p>Temperature = {info.temp}&deg;C</p>
-                  <p>Humidity = {info.humidity}</p>
-                  <p>Min Temp = {info.tempMin}&deg;C</p>
-                  <p>Max Temp = {info.tempMax}&deg;C</p>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                component={"span"}
+              >
+                {info.city ? (
+                  <>
+                    <img
+                      src={`https://openweathermap.org/img/wn/${info.weatherIcon}@2x.png`}
+                      width="50"
+                      height="50"
+                    ></img>
+                    <p>Temperature = {info.temp}&deg;C</p>
+                    <p>Humidity = {info.humidity}</p>
+                    <p>Min Temp = {info.tempMin}&deg;C</p>
+                    <p>Max Temp = {info.tempMax}&deg;C</p>
+                    <p>
+                      The Weather can be described as{" "}
+                      <b>
+                        <i>{info.weatherCondition}</i>
+                      </b>{" "}
+                      and feels like {info.feelsLike}&deg;C
+                    </p>
+                  </>
+                ) : (
                   <p>
-                    The Weather can be described as{" "}
-                    <b>
-                      <i>{info.weatherCondition}</i>
-                    </b>{" "}
-                    and feels like {info.feelsLike}&deg;C
+                    Grant location access to discover your city's weather or
+                    enter your city's name for a search.
                   </p>
-                </>
-              ) : (
-                <p>
-                  Grant location access to discover your city's weather or enter
-                  your city's name for a search.
-                </p>
-              )}
-            </Typography>
+                )}
+              </Typography>
+            </div>
           </CardContent>
         </Card>
       </div>
